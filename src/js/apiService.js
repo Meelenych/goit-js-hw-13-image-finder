@@ -127,7 +127,8 @@ const gallery = document.querySelector('.gallery')
     })
 
 
-      clearQuery()
+    clearQuery()
+    
     loadMore.scrollIntoView({
         behavior: 'smooth',
         block: 'end',
