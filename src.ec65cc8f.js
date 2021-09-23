@@ -34,4 +34,4 @@ var i=require("./isObject"),t=require("./now"),r=require("./toNumber"),n="Expect
 },{"lodash/debounce":"CXfR"}],"Focm":[function(require,module,exports) {
 "use strict";require("./sass/main.scss");var e=s(require("./js/apiService"));function s(e){return e&&e.__esModule?e:{default:e}}
 },{"./sass/main.scss":"clu1","./js/apiService":"eQwa"}]},{},["Focm"], null)
-//# sourceMappingURL=/parcel-project-template/src.ec65cc8f.js.map
+//# sourceMappingURL=/goit-js-hw-13-image-finder/src.ec65cc8f.js.map
