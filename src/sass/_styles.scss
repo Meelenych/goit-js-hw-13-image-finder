@@ -95,6 +95,12 @@ li {
 
 .stats {
   display: flex;
+  justify-content: space-evenly;
+}
+
+.stats-item {
+  display: flex;
+  flex-direction: column;
   justify-content: center;
 }
 
@@ -181,7 +187,7 @@ li {
 .lightbox__button {
   position: absolute;
   top: 8px;
-  right: 8px;
+  right: 35px;
   display: flex;
   align-items: center;
   justify-content: center;

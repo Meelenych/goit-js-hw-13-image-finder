@@ -186,7 +186,7 @@ loadMore.addEventListener('click', (e) => {
 
 
 
-//================================================================
+//==============================LIGHTBOX==================================
 
 //==============================Доступы=====================================
 const lightbox = document.querySelector('.lightbox')
@@ -202,7 +202,7 @@ gallery.addEventListener('click', (e) => {
    //console.log('click')
     e.preventDefault();
     lightbox.classList.toggle('is-open')
-    console.log('dataset', e.target.dataset);
+    // console.log('dataset', e.target.dataset);
     image.setAttribute('src', `${e.target.dataset.src}`)
 })
 //===========================Закрытие модалки========================================
