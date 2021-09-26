@@ -1,50 +1,41 @@
-//Pixabay API поддерживает пагинацию, пусть в ответе приходит по 12 объектов, 
-// установлено в параметре per_page.По умолчанию параметр page равен 1. 
-// При каждом последующем запросе page увеличивается на 1,
-// а при поиске по новому ключевому слову необходимо сбрасывать его значение в 1.
-
-import debounce from "lodash/debounce";
+import Notiflix from "notiflix";
+// import debounce from "lodash/debounce";
+var debounce = require('debounce');
+var throttle = require('lodash.throttle');
+// console.log(throttle );
 // console.log(debounce);
-
-
-const input = document.getElementById('search-form')
-// console.log(input);
-input.addEventListener('change',((e) => {
-    console.log(e.target.value);
-    // const { value } = e.target
-    
-
-    //Autorization
-    const API_KEY = '23474268-70d851d8204f5902d9e83a665';
-    
-    //URL and query params
-    let imageOrientation = 'horizontal'
-    let searchQuery = e.target.value;
-    let pageNumber = 1;
-    let perPage = 12;
-    let imgType = 'photo'
-
-
-const baseUrl = `https://pixabay.com/api/`;
-const params = `?key=${API_KEY}&q=${searchQuery}&orientation=${imageOrientation}&page=${pageNumber}&per_page=${perPage}&image_type=${imgType}`
-const url = baseUrl + params;
-
 //Input and buttons
+const input = document.getElementById('search-form')
+// const input = document.getElementById('search-button')
+console.log(input);
 const loadMore = document.querySelector('.load-more-button')
-console.log(loadMore);
-    
-//Image fetcher
-
+// console.log(loadMore);
 const gallery = document.querySelector('.gallery')
 // console.log('gallery:', gallery);
 
+//Autorization
+const API_KEY = '23474268-70d851d8204f5902d9e83a665';
+//URL and query params
+let pageNumber = 1;
+let perPage = 12;
+let imgType = 'photo'
+let imageOrientation = 'horizontal'
+let searchQuery = '';
+const baseUrl = `https://pixabay.com/api/`;
 
+//SEARCH
+input.addEventListener('input', debounce ((e) => {
+    searchQuery = e.target.value;
+    console.log('search query from input:', e.target.value);
+
+    const params = `?key=${API_KEY}&q=${searchQuery}&orientation=${imageOrientation}&page=${pageNumber}&per_page=${perPage}&image_type=${imgType}`
+    const url = baseUrl + params;
+   //Image fetcher
     const images = function () {
     
         fetch(url)
     
             .then((response) => {
-                // console.log(response);
                 if (response.status === 200) {
                     return response.json()
                 } else {
@@ -52,7 +43,6 @@ const gallery = document.querySelector('.gallery')
                 }
             })
             .then((data) => {
-                // console.log('data:', data);
                 if (data.hits.length === 0) {
                     throw new Error('Nothing found')
                 }
@@ -63,7 +53,7 @@ const gallery = document.querySelector('.gallery')
                 
             })
             .then(array => {
-                console.log(array);
+                console.log('search result:', array);
        
                 let items = array.map((item) => {
                     const { webformatURL, largeImageURL, likes, views, comments, downloads } = item
@@ -94,47 +84,95 @@ const gallery = document.querySelector('.gallery')
             </li>
             `
                 }).join('')
-        
-                gallery.insertAdjacentHTML('beforeend', items)
-                // console.log(items);
-                
+                gallery.insertAdjacentHTML('beforeend', items)               
             })
             .catch((e) => {
                 alert(e);
                 console.log(e);
             })
-        
-        // console.log(images); 
-        //===============================================================
-    
-
+            .finally(() => input.reset())
     }
-  
+    console.log(url);
     images()
+
     
     function clearQuery() {
         gallery.innerHTML = '';
         e.target.value = ''
     }
-        
-
-
-    loadMore.addEventListener('click', (e) => {
-        console.log("load more:", e);
-        console.log('pageNumber:', pageNumber);
-        pageNumber += 1;
-        return images(pageNumber)
-    })
-
-
-    clearQuery()
+        clearQuery()
+}, 1000))
+let pageNumb = 2;
+//LOAD MORE    
+loadMore.addEventListener('click', (e) => {
+    console.log("load more:", e);
+    console.log('pageNumb:', pageNumb);
+    const params = `?key=${API_KEY}&q=${searchQuery}&orientation=${imageOrientation}&page=${pageNumb}&per_page=${perPage}&image_type=${imgType}`
+    const url = baseUrl + params;
+ 
+    pageNumb += 1;
+    // searchQuery = e.target.value
+        fetch(url)
     
+            .then((response) => {
+                // console.log(response);
+                if (response.status === 200) {
+                    return response.json()
+                } else {
+                    throw new Error('No results')
+                }
+            })
+            .then((data) => {
+                if (data.hits.length === 0) {
+                    throw new Error('Nothing found')
+                }
+                else if (data.hits.length !== 0) {
+                    loadMore.classList.remove('invisible')
+                }
+                return data.hits
+                
+            })
+            .then(array => {
+                console.log('load more search result:',array);  
+                let items = array.map((item) => {
+                    const { webformatURL, largeImageURL, likes, views, comments, downloads } = item
+                    return `
+            <li>
+            <div class="photo-card">
+            <img src="${webformatURL}" alt="" data-src = "${largeImageURL}"/>
+            
+            <div class="stats">
+            <p class="stats-item">
+            <i class="material-icons">thumb_up</i>
+            ${likes}
+            </p>
+            <p class="stats-item">
+            <i class="material-icons">visibility</i>
+            ${views}
+            </p>
+            <p class="stats-item">
+            <i class="material-icons">comment</i>
+            ${comments}
+            </p>
+            <p class="stats-item">
+            <i class="material-icons">cloud_download</i>
+            ${downloads}
+            </p>
+            </div>
+            </div>
+            </li>
+            `
+                }).join('')
+                gallery.insertAdjacentHTML('beforeend', items)               
+            })
+    console.log('pageNumb:', pageNumb);
+
     loadMore.scrollIntoView({
         behavior: 'smooth',
         block: 'end',
     });
-}))
 
+})
 
 
 
