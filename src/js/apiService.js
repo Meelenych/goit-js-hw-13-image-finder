@@ -39,11 +39,13 @@ input.addEventListener('input', debounce ((e) => {
                 if (response.status === 200) {
                     return response.json()
                 } else {
+                    Notiflix.Notify.failure('No results');
                     throw new Error('No results')
                 }
             })
             .then((data) => {
                 if (data.hits.length === 0) {
+                    Notiflix.Notify.failure('Nothing found');
                     throw new Error('Nothing found')
                 }
                 else if (data.hits.length !== 0) {
@@ -54,7 +56,7 @@ input.addEventListener('input', debounce ((e) => {
             })
             .then(array => {
                 console.log('search result:', array);
-       
+                Notiflix.Notify.success('Success! 12 results found!')
                 let items = array.map((item) => {
                     const { webformatURL, largeImageURL, likes, views, comments, downloads } = item
                     return `
@@ -87,7 +89,6 @@ input.addEventListener('input', debounce ((e) => {
                 gallery.insertAdjacentHTML('beforeend', items)               
             })
             .catch((e) => {
-                alert(e);
                 console.log(e);
             })
             .finally(() => input.reset())
