@@ -38,7 +38,13 @@ input.addEventListener('input', debounce ((e) => {
             .then((response) => {
                 if (response.status === 200) {
                     return response.json()
-                } else {
+                }
+                // else if (e.target.value.length = 2) {
+                //     console.log(e.target.input.value.length);
+                //     Notiflix.Notify.warning('Please specify your request!'); 
+                // }
+                
+                else {
                     Notiflix.Notify.failure('No results');
                     throw new Error('No results')
                 }
@@ -49,6 +55,7 @@ input.addEventListener('input', debounce ((e) => {
                     throw new Error('Nothing found')
                 }
                 else if (data.hits.length !== 0) {
+                    Notiflix.Notify.success(`Success! ${data.hits.length} results found!`)
                     loadMore.classList.remove('invisible')
                 }
                 return data.hits
@@ -56,7 +63,7 @@ input.addEventListener('input', debounce ((e) => {
             })
             .then(array => {
                 console.log('search result:', array);
-                Notiflix.Notify.success('Success! 12 results found!')
+                
                 let items = array.map((item) => {
                     const { webformatURL, largeImageURL, likes, views, comments, downloads } = item
                     return `
