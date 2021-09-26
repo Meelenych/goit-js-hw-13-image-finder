@@ -186,3 +186,44 @@ loadMore.addEventListener('click', (e) => {
 
 
 
+//================================================================
+
+//==============================Доступы=====================================
+const lightbox = document.querySelector('.lightbox')
+// console.log(lightbox)
+const overlay = document.querySelector('.lightbox__overlay')
+// console.log(overlay)
+const content = document.querySelector('.lightbox__content')
+// console.log(content)
+const image = document.querySelector('.lightbox__image')
+//console.log(image)
+//===========================Открытие модалки========================================
+gallery.addEventListener('click', (e) => {
+   //console.log('click')
+    e.preventDefault();
+    lightbox.classList.toggle('is-open')
+    console.log('dataset', e.target.dataset);
+    image.setAttribute('src', `${e.target.dataset.src}`)
+})
+//===========================Закрытие модалки========================================
+const button = document.querySelector('.lightbox__button')
+// console.log(button)
+const close = function () {
+    lightbox.classList.remove('is-open');
+    image.src = '';
+    image.alt = '';
+}
+
+//===========================Слушатели событий========================================
+
+    button.addEventListener('click', () => {
+        close()
+    })
+
+    overlay.addEventListener('click', () => {
+        close()
+    })
+
+    window.addEventListener('keydown', (e) => {
+        if (e.code === "Escape") { close() }
+    })
