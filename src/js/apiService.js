@@ -60,7 +60,7 @@ input.addEventListener('input', debounce ((e) => {
                     return `
             <li>
             <div class="photo-card">
-            <img src="${webformatURL}" alt="" data-src = "${largeImageURL}"/>
+            <img src="${webformatURL}" loading="lazy" alt="" data-src = "${largeImageURL}"/>
             
             <div class="stats">
             <p class="stats-item">
@@ -102,8 +102,10 @@ input.addEventListener('input', debounce ((e) => {
     }
         clearQuery()
 }, 1000))
+
+
+//LOAD MORE 
 let pageNumb = 2;
-//LOAD MORE    
 loadMore.addEventListener('click', (e) => {
     console.log("load more:", e);
     console.log('pageNumb:', pageNumb);
@@ -139,7 +141,7 @@ loadMore.addEventListener('click', (e) => {
                     return `
             <li>
             <div class="photo-card">
-            <img src="${webformatURL}" alt="" data-src = "${largeImageURL}"/>
+            <img src="${webformatURL}" loading="lazy" alt="" data-src = "${largeImageURL}"/>
             
             <div class="stats">
             <p class="stats-item">
